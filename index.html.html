@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLAN M: Pengembaraan Literasi Bahasa Melayu</title>
+<style>
+:root{
+  --navy:#083b66;--blue:#1676c4;--sky:#5ed7f2;--green:#26a96c;
+  --yellow:#ffd43b;--orange:#ff9f1c;--red:#ef5350;--purple:#7e57c2;
+  --white:#fff;--ink:#20324a;
+}
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{
+  margin:0;min-height:100vh;
+  background:radial-gradient(circle at top,#8ce8ff,#2b8bd4 48%,#0b3c68 100%);
+  color:#fff;overflow-x:hidden
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.screen{min-height:100vh;padding:18px}
+.hero{max-width:980px;margin:auto;text-align:center;padding-top:20px}
+.logo{
+  width:100px;height:100px;margin:auto;border-radius:28px;
+  display:grid;place-items:center;font-size:58px;
+  background:linear-gradient(145deg,#fff176,#ff9800);
+  box-shadow:0 18px 35px rgba(0,0,0,.35),inset 0 3px 0 rgba(255,255,255,.55);
+  animation:floatLogo 2s ease-in-out infinite alternate
+}
+@keyframes floatLogo{to{transform:translateY(-10px) rotate(3deg)}}
+h1{
+  margin:14px 0 0;font-size:clamp(34px,7vw,68px);
+  text-shadow:0 8px 20px rgba(0,0,0,.45)
+}
+.subtitle{font-size:clamp(18px,3vw,29px);color:#fff176;font-weight:900}
+.tagline{font-size:17px;opacity:.95}
+.glass{
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.28);
+  backdrop-filter:blur(12px);border-radius:25px;
+  box-shadow:0 18px 45px rgba(0,0,0,.28)
+}
+.setup{max-width:720px;margin:18px auto;padding:22px}
+.setup input{
+  width:100%;padding:14px 16px;border:0;border-radius:15px;
+  margin:8px 0 16px;color:#183150;font-size:17px
+}
+.avatar-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 18px}
+.avatar-card{
+  border:3px solid transparent;background:rgba(255,255,255,.1);color:#fff;
+  border-radius:18px;padding:14px;font-size:45px
+}
+.avatar-card small{display:block;font-size:13px;margin-top:6px}
+.avatar-card.selected{border-color:var(--yellow);background:rgba(255,212,59,.2)}
+.primary,.secondary,.danger{
+  border:0;border-radius:17px;padding:13px 20px;font-weight:900;margin:5px;
+  box-shadow:0 8px 16px rgba(0,0,0,.24)
+}
+.primary{background:linear-gradient(135deg,#ffe066,#ff922b);color:#493000}
+.secondary{background:linear-gradient(135deg,#63e6ff,#1676c4);color:#fff}
+.danger{background:linear-gradient(135deg,#ff8787,#d32f2f);color:#fff}
+.info-box{max-width:780px;margin:16px auto;padding:18px;text-align:left;line-height:1.6}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  padding:10px 14px;background:rgba(3,32,60,.95);position:sticky;top:0;z-index:40
+}
+.brand{font-weight:900}.stats{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#fff;color:#17436d;border-radius:999px;padding:8px 12px;font-weight:900}
+.map-wrap{padding:12px}
+#map{
+  position:relative;max-width:1120px;height:700px;margin:auto;overflow:hidden;
+  border:7px solid rgba(255,255,255,.88);border-radius:30px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,255,255,.28),transparent 13%),
+    linear-gradient(#7bd3ff 0 23%,#8fd77c 23% 100%);
+  box-shadow:0 26px 54px rgba(0,0,0,.45)
+}
+.cloud{
+  position:absolute;font-size:55px;opacity:.85;
+  animation:cloudMove 18s linear infinite
+}
+.cloud.c1{top:35px;left:-80px}.cloud.c2{top:70px;left:-180px;animation-delay:7s}
+@keyframes cloudMove{to{transform:translateX(1300px)}}
+.sun{
+  position:absolute;right:45px;top:28px;font-size:72px;
+  animation:sunPulse 2s ease-in-out infinite alternate
+}
+@keyframes sunPulse{to{transform:scale(1.12) rotate(12deg)}}
+.road{
+  position:absolute;left:0;right:0;top:320px;height:120px;background:#68717c;
+  border-top:9px solid #eceff1;border-bottom:9px solid #eceff1
+}
+.road:after{
+  content:"";position:absolute;left:0;right:0;top:54px;height:7px;
+  background:repeating-linear-gradient(90deg,transparent 0 45px,#ffe066 45px 85px,transparent 85px 130px)
+}
+.path{
+  position:absolute;width:135px;top:210px;bottom:0;left:492px;
+  background:#d9b382;border-left:5px solid #c89a62;border-right:5px solid #c89a62
+}
+.station{
+  position:absolute;width:220px;height:150px;border-radius:24px;
+  color:white;text-align:center;font-weight:900;padding:14px;
+  box-shadow:0 16px 28px rgba(0,0,0,.3);
+  border:5px solid rgba(255,255,255,.82);
+  transform:perspective(700px) rotateX(5deg);
+  transition:transform .2s,filter .2s
+}
+.station:hover{transform:perspective(700px) rotateX(5deg) scale(1.04)}
+.station .icon{display:block;font-size:55px}
+.station .done{position:absolute;right:10px;top:8px;font-size:28px}
+#huruf{left:40px;top:185px;background:linear-gradient(145deg,#7e57c2,#4527a0)}
+#suku{right:40px;top:185px;background:linear-gradient(145deg,#ef5350,#b71c1c)}
+#perkataan{left:40px;bottom:55px;background:linear-gradient(145deg,#ffb74d,#ef6c00)}
+#ayat{right:40px;bottom:55px;background:linear-gradient(145deg,#26a69a,#00695c)}
+#cerita{
+  left:450px;top:390px;width:220px;height:210px;
+  background:linear-gradient(145deg,#78909c,#263238);z-index:3
+}
+#cerita.locked{filter:grayscale(1);opacity:.78}
+.tree{position:absolute;font-size:55px}
+.t1{left:280px;top:170px}.t2{right:285px;top:170px}.t3{left:300px;bottom:45px}.t4{right:300px;bottom:45px}
+#player{
+  position:absolute;width:72px;height:72px;border-radius:50%;
+  display:grid;place-items:center;font-size:42px;
+  background:linear-gradient(145deg,#fff176,#ff9800);
+  box-shadow:0 12px 20px rgba(0,0,0,.35);z-index:12;
+  transition:left .1s linear,top .1s linear,transform .15s
+}
+#player.jump{transform:translateY(-8px) scale(1.08)}
+.joystick{
+  position:absolute;left:18px;bottom:18px;z-index:30;
+  display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(3,50px);gap:4px
+}
+.joystick button{border:0;border-radius:14px;background:rgba(255,255,255,.88);font-size:22px}
+.joystick .up{grid-column:2}.joystick .left{grid-column:1;grid-row:2}
+.joystick .down{grid-column:2;grid-row:2}.joystick .right{grid-column:3;grid-row:2}
+.interact{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  border:0;border-radius:999px;background:#fff;color:#17436d;
+  padding:12px 22px;font-weight:900;z-index:30
+}
+
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.73);
+  display:grid;place-items:center;padding:16px;z-index:100
+}
+.modal-card{
+  width:min(760px,96vw);max-height:92vh;overflow:auto;
+  background:#fff;color:var(--ink);border-radius:25px;padding:24px;
+  box-shadow:0 28px 60px rgba(0,0,0,.52)
+}
+.modal-card h2{margin-top:0;color:#1676c4}
+.progress{height:13px;background:#e0e0e0;border-radius:999px;overflow:hidden}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,#29d6c7,#43a047);width:0}
+.question{
+  font-size:25px;font-weight:900;background:#edf7ff;
+  padding:17px;border-radius:17px;margin:15px 0;text-align:center
+}
+.picture{font-size:88px;text-align:center;animation:pictureBounce 1s ease-in-out infinite alternate}
+@keyframes pictureBounce{to{transform:translateY(-8px) scale(1.06)}}
+.answers{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.answer{
+  border:0;border-radius:16px;padding:16px;background:#e8f3ff;
+  color:#15365f;font-weight:900;font-size:18px;text-align:center
+}
+.answer:hover{background:#cce5ff;transform:scale(1.02)}
+.feedback{min-height:34px;font-size:19px;font-weight:900;text-align:center;margin-top:10px}
+.reward{text-align:center}
+.starburst{font-size:75px;animation:rewardSpin 1.2s ease-in-out infinite alternate}
+@keyframes rewardSpin{to{transform:rotate(12deg) scale(1.15)}}
+.confetti{position:fixed;width:10px;height:18px;top:-30px;z-index:150;animation:fall 2.2s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+
+.cert{
+  text-align:center;border:13px double #d5a52e;background:#fffdf2;color:#243652;
+  padding:34px;position:relative;overflow:hidden
+}
+.cert:before,.cert:after{content:"⭐";position:absolute;font-size:70px;opacity:.16}
+.cert:before{left:15px;top:10px}.cert:after{right:15px;bottom:10px}
+.cert h2{font-size:38px;margin:8px;color:#0e609b}
+.cert .name{
+  font-size:34px;color:#0d75bd;font-weight:900;
+  border-bottom:2px solid #aaa;display:inline-block;padding:5px 30px
+}
+.cert .title{font-size:27px;color:#c58b00;font-weight:900}
+.creator{font-size:13px;color:#58677b;margin-top:16px}
+@media(max-width:780px){
+  #map{height:760px}.path{left:calc(50% - 67px)}
+  .station{width:180px;height:135px;font-size:14px}
+  #huruf,#perkataan{left:10px}#suku,#ayat{right:10px}
+  #cerita{left:calc(50% - 95px);width:190px}
+  .answers{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<section id="startScreen" class="screen">
+  <div class="hero">
+    <div class="logo">📗</div>
+    <h1>PLAN M</h1>
+    <div class="subtitle">PENGEMBARAAN LITERASI BAHASA MELAYU</div>
+    <p class="tagline">Daripada Huruf ke Ayat • Belajar • Bermain • Berjaya</p>
+
+    <div class="setup glass">
+      <label><strong>Nama Murid</strong></label>
+      <input id="studentName" placeholder="Taip nama murid">
+      <strong>Pilih Avatar</strong>
+      <div class="avatar-row">
+        <button class="avatar-card selected" data-avatar="👧">👧<small>Murid perempuan</small></button>
+        <button class="avatar-card" data-avatar="👦">👦<small>Murid lelaki</small></button>
+        <button class="avatar-card" data-avatar="🤖">🤖<small>Robot pintar</small></button>
+      </div>
+      <button class="primary" onclick="newGame()">MULA PENGEMBARAAN</button>
+      <button id="continueBtn" class="secondary hidden" onclick="continueGame()">SAMBUNG PERMAINAN</button>
+    </div>
+
+    <div class="info-box glass">
+      <strong>Matlamat Literasi KSSR:</strong><br>
+      Murid mengenal dan menyebut huruf, membaca suku kata KV dan KVK, membaca perkataan mudah,
+      memilih ayat mudah serta memahami petikan ringkas. Aktiviti menggunakan gambar, audio,
+      pengulangan dan ganjaran untuk membantu murid yang sangat lemah literasi.
+    </div>
+  </div>
+</section>
+
+<section id="gameScreen" class="hidden">
+  <div class="topbar">
+    <div class="brand">📗 PLAN M: Dari Huruf ke Ayat</div>
+    <div class="stats">
+      <div class="pill">Murid: <span id="nameDisplay"></span></div>
+      <div class="pill">Skor: <span id="scoreDisplay">0</span></div>
+      <div class="pill">Bintang: <span id="starDisplay">0</span>/4</div>
+    </div>
+    <button class="secondary" onclick="saveGame()">SIMPAN</button>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map">
+      <div class="cloud c1">☁️</div><div class="cloud c2">☁️</div><div class="sun">☀️</div>
+      <div class="road"></div><div class="path"></div>
+      <div class="tree t1">🌳</div><div class="tree t2">🌳</div><div class="tree t3">🌴</div><div class="tree t4">🌴</div>
+
+      <div id="huruf" class="station" data-place="huruf"><span class="done"></span><span class="icon">🔤</span>TAMAN HURUF</div>
+      <div id="suku" class="station" data-place="suku"><span class="done"></span><span class="icon">🧩</span>RUMAH SUKU KATA</div>
+      <div id="perkataan" class="station" data-place="perkataan"><span class="done"></span><span class="icon">🖼️</span>PASAR PERKATAAN</div>
+      <div id="ayat" class="station" data-place="ayat"><span class="done"></span><span class="icon">✍️</span>STESEN AYAT</div>
+      <div id="cerita" class="station locked" data-place="cerita"><span class="icon">🏰</span>ISTANA CERITA<br><small>Kumpul 4 bintang</small></div>
+
+      <div id="player">👧</div>
+
+      <div class="joystick">
+        <button class="up" onpointerdown="moveOnce(0,-28)">⬆️</button>
+        <button class="left" onpointerdown="moveOnce(-28,0)">⬅️</button>
+        <button class="down" onpointerdown="moveOnce(0,28)">⬇️</button>
+        <button class="right" onpointerdown="moveOnce(28,0)">➡️</button>
+      </div>
+      <button class="interact" onclick="interact()">MASUK / MAIN (E)</button>
+    </div>
+  </div>
+</section>
+
+<div id="quizModal" class="modal hidden">
+  <div class="modal-card">
+    <h2 id="questTitle"></h2>
+    <div class="progress"><span id="progressBar"></span></div>
+    <div id="picture" class="picture"></div>
+    <div id="questionText" class="question"></div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback"></div>
+    <div style="text-align:center">
+      <button class="secondary" onclick="repeatAudio()">🔊 DENGAR SEMULA</button>
+      <button class="danger" onclick="closeQuiz()">TUTUP</button>
+    </div>
+  </div>
+</div>
+
+<div id="rewardModal" class="modal hidden">
+  <div class="modal-card reward">
+    <div class="starburst">⭐</div>
+    <h2>Tahniah!</h2>
+    <p id="rewardText"></p>
+    <button class="primary" onclick="closeReward()">KEMBALI KE PETA</button>
+  </div>
+</div>
+
+<div id="certificateModal" class="modal hidden">
+  <div class="modal-card">
+    <div id="certificate" class="cert">
+      <div style="font-size:55px">🏆</div>
+      <h2>SIJIL PENCAPAIAN</h2>
+      <p>Dengan bangganya dianugerahkan kepada</p>
+      <div class="name" id="certName"></div>
+      <p>kerana berjaya menamatkan</p>
+      <h3>PLAN M: Pengembaraan Literasi Bahasa Melayu</h3>
+      <div class="title">WIRA LITERASI PLAN M</div>
+      <p id="certScore"></p>
+      <p id="certDate"></p>
+      <div class="creator">
+        Dibangunkan oleh Cikgu Vinothan S. Ramayah<br>
+        Penyelaras PLAN M • SMK Bandar Utama Damansara 2
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px">
+      <button class="secondary" onclick="window.print()">CETAK / SIMPAN PDF</button>
+      <button class="primary" onclick="playAgain()">MAIN SEMULA</button>
+      <button class="danger" onclick="document.getElementById('certificateModal').classList.add('hidden')">TUTUP</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questionBank={
+ huruf:[
+  {pic:"🍎",q:"Pilih huruf A.",audio:"Pilih huruf A",a:["A","B","D","M"],c:0},
+  {pic:"⚽",q:"Pilih huruf B.",audio:"Pilih huruf B",a:["P","B","R","S"],c:1},
+  {pic:"🐱",q:"Pilih huruf K.",audio:"Pilih huruf K",a:["K","H","M","T"],c:0},
+  {pic:"🚗",q:"Pilih huruf K.",audio:"Pilih huruf K",a:["L","S","K","N"],c:2}
+ ],
+ suku:[
+  {pic:"⚽",q:"Bola bermula dengan suku kata...",audio:"Bo la. Pilih suku kata bo",a:["ba","bo","bu","bi"],c:1},
+  {pic:"📘",q:"Buku bermula dengan suku kata...",audio:"Bu ku. Pilih suku kata bu",a:["bu","ba","be","bo"],c:0},
+  {pic:"🍚",q:"Nasi bermula dengan suku kata...",audio:"Na si. Pilih suku kata na",a:["ni","nu","na","ne"],c:2},
+  {pic:"🏠",q:"Rumah bermula dengan suku kata...",audio:"Ru mah. Pilih suku kata ru",a:["ra","ri","ru","ro"],c:2}
+ ],
+ perkataan:[
+  {pic:"🐱",q:"Apakah nama gambar ini?",audio:"Kucing",a:["kucing","rumah","meja","kereta"],c:0},
+  {pic:"🚗",q:"Apakah nama gambar ini?",audio:"Kereta",a:["bola","ikan","kereta","buku"],c:2},
+  {pic:"🏠",q:"Apakah nama gambar ini?",audio:"Rumah",a:["nasi","rumah","ayam","pensel"],c:1},
+  {pic:"📘",q:"Apakah nama gambar ini?",audio:"Buku",a:["buku","meja","kucing","sekolah"],c:0}
+ ],
+ ayat:[
+  {pic:"🍚",q:"Pilih ayat yang betul.",audio:"Ali makan nasi",a:["Ali makan nasi.","Ali baca buku.","Ali naik kereta.","Ali main bola."],c:0},
+  {pic:"📘",q:"Pilih ayat yang betul.",audio:"Siti baca buku",a:["Siti makan nasi.","Siti baca buku.","Siti tidur.","Siti naik bas."],c:1},
+  {pic:"⚽",q:"Pilih ayat yang betul.",audio:"Amin bermain bola",a:["Amin minum air.","Amin membaca.","Amin bermain bola.","Amin memasak."],c:2},
+  {pic:"🐱",q:"Pilih ayat yang betul.",audio:"Ini seekor kucing",a:["Ini sebuah rumah.","Ini seekor kucing.","Ini sebuah kereta.","Ini sebuah buku."],c:1}
+ ],
+ cerita:[
+  {pic:"👦🍚",q:"Ali makan nasi. Apakah yang Ali makan?",audio:"Ali makan nasi. Apakah yang Ali makan?",a:["buku","nasi","bola","ikan"],c:1},
+  {pic:"👧📘",q:"Siti membaca buku. Apakah yang Siti baca?",audio:"Siti membaca buku. Apakah yang Siti baca?",a:["buku","nasi","kereta","bola"],c:0},
+  {pic:"👨🚗",q:"Ayah memandu kereta. Siapakah yang memandu?",audio:"Ayah memandu kereta. Siapakah yang memandu?",a:["Siti","Ali","Ayah","Ibu"],c:2},
+  {pic:"🐱🏠",q:"Kucing itu di dalam rumah. Di manakah kucing?",audio:"Kucing itu di dalam rumah. Di manakah kucing?",a:["di sekolah","di rumah","di taman","di kereta"],c:1}
+ ]
+};
+
+let state={
+  name:"",avatar:"👧",score:0,
+  completed:{huruf:false,suku:false,perkataan:false,ayat:false},
+  x:520,y:410
+};
+let currentPlace=null,currentQ=0,lastAudio="";
+const player=document.getElementById("player"),map=document.getElementById("map");
+
+document.querySelectorAll(".avatar-card").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".avatar-card").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");state.avatar=btn.dataset.avatar
+  }
+});
+if(localStorage.getItem("planMLiterasi"))document.getElementById("continueBtn").classList.remove("hidden");
+
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="ms-MY";u.rate=.72;u.pitch=1;
+    speechSynthesis.speak(u)
+  }catch(e){}
+}
+function repeatAudio(){if(lastAudio)speak(lastAudio)}
+
+function newGame(){
+  const name=document.getElementById("studentName").value.trim();
+  if(!name){alert("Sila taip nama murid.");return}
+  state={name,avatar:state.avatar,score:0,completed:{huruf:false,suku:false,perkataan:false,ayat:false},x:520,y:410};
+  launch()
+}
+function continueGame(){
+  state=JSON.parse(localStorage.getItem("planMLiterasi"));
+  launch()
+}
+function launch(){
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+  document.getElementById("nameDisplay").textContent=state.name;
+  player.textContent=state.avatar;updateUI();updatePlayer();
+  speak("Selamat datang "+state.name+". Mari belajar Bahasa Melayu.")
+}
+function saveGame(){
+  localStorage.setItem("planMLiterasi",JSON.stringify(state));
+  alert("Kemajuan telah disimpan.")
+}
+function updatePlayer(){
+  const maxX=map.clientWidth-player.offsetWidth-8,maxY=map.clientHeight-player.offsetHeight-8;
+  state.x=Math.max(8,Math.min(maxX,state.x));
+  state.y=Math.max(8,Math.min(maxY,state.y));
+  player.style.left=state.x+"px";player.style.top=state.y+"px";
+  player.classList.add("jump");setTimeout(()=>player.classList.remove("jump"),130)
+}
+function moveOnce(dx,dy){state.x+=dx;state.y+=dy;updatePlayer()}
+document.addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+  if(["arrowup","w"].includes(k))moveOnce(0,-24);
+  if(["arrowdown","s"].includes(k))moveOnce(0,24);
+  if(["arrowleft","a"].includes(k))moveOnce(-24,0);
+  if(["arrowright","d"].includes(k))moveOnce(24,0);
+  if(k==="e")interact()
+});
+function rectDistance(a,b){
+  const r1=a.getBoundingClientRect(),r2=b.getBoundingClientRect();
+  const dx=Math.max(r2.left-r1.right,r1.left-r2.right,0);
+  const dy=Math.max(r2.top-r1.bottom,r1.top-r2.bottom,0);
+  return Math.hypot(dx,dy)
+}
+function nearestPlace(){
+  let best=null,dist=9999;
+  document.querySelectorAll(".station").forEach(b=>{
+    const d=rectDistance(player,b);
+    if(d<dist){dist=d;best=b.dataset.place}
+  });
+  return dist<88?best:null
+}
+function interact(){
+  const place=nearestPlace();
+  if(!place){alert("Gerakkan avatar lebih dekat dengan tempat permainan.");return}
+  if(place==="cerita"){
+    if(starCount()<4){alert("Kumpul empat bintang terlebih dahulu.");return}
+    startQuest("cerita");return
+  }
+  if(state.completed[place]){alert("Tahap ini telah selesai. Tahniah!");return}
+  startQuest(place)
+}
+function startQuest(place){
+  currentPlace=place;currentQ=0;
+  const titles={
+    huruf:"Tahap 1: Kenal Huruf",
+    suku:"Tahap 2: Suku Kata",
+    perkataan:"Tahap 3: Gambar dan Perkataan",
+    ayat:"Tahap 4: Ayat Mudah",
+    cerita:"Tahap Akhir: Baca dan Faham"
+  };
+  document.getElementById("questTitle").textContent=titles[place];
+  document.getElementById("quizModal").classList.remove("hidden");
+  loadQuestion()
+}
+function loadQuestion(){
+  const data=questionBank[currentPlace][currentQ];
+  document.getElementById("picture").textContent=data.pic;
+  document.getElementById("questionText").textContent=data.q;
+  document.getElementById("feedback").textContent="";
+  document.getElementById("progressBar").style.width=((currentQ/questionBank[currentPlace].length)*100)+"%";
+  lastAudio=data.audio;
+  const box=document.getElementById("answers");box.innerHTML="";
+  data.a.forEach((text,i)=>{
+    const b=document.createElement("button");
+    b.className="answer";b.textContent=text;
+    b.onclick=()=>checkAnswer(i);box.appendChild(b)
+  });
+  setTimeout(()=>speak(data.audio),300)
+}
+function checkAnswer(i){
+  const data=questionBank[currentPlace][currentQ];
+  if(i===data.c){
+    state.score+=10;
+    document.getElementById("feedback").textContent="✅ Betul! Hebat!";
+    speak("Betul. Hebat.");
+    setTimeout(nextQuestion,900)
+  }else{
+    document.getElementById("feedback").textContent="❌ Cuba lagi. Dengarkan semula.";
+    speak("Cuba lagi.");
+    state.score=Math.max(0,state.score-1)
+  }
+  updateUI()
+}
+function nextQuestion(){
+  currentQ++;
+  if(currentQ<questionBank[currentPlace].length){loadQuestion();return}
+  document.getElementById("quizModal").classList.add("hidden");
+  if(currentPlace==="cerita"){showCertificate();return}
+  state.completed[currentPlace]=true;state.score+=20;updateUI();
+  document.getElementById("rewardText").textContent="Anda berjaya menamatkan "+document.getElementById("questTitle").textContent+" dan memperoleh satu bintang.";
+  document.getElementById("rewardModal").classList.remove("hidden");
+  confetti();saveGame();speak("Tahniah. Anda mendapat satu bintang.")
+}
+function closeQuiz(){document.getElementById("quizModal").classList.add("hidden")}
+function closeReward(){document.getElementById("rewardModal").classList.add("hidden")}
+function starCount(){return Object.values(state.completed).filter(Boolean).length}
+function updateUI(){
+  document.getElementById("scoreDisplay").textContent=state.score;
+  document.getElementById("starDisplay").textContent=starCount();
+  Object.keys(state.completed).forEach(k=>{
+    document.querySelector("#"+k+" .done").textContent=state.completed[k]?"⭐":""
+  });
+  const castle=document.getElementById("cerita");
+  castle.classList.toggle("locked",starCount()<4);
+  castle.querySelector("small").textContent=starCount()<4?"Kumpul 4 bintang":"Istana dibuka!"
+}
+function showCertificate(){
+  state.score+=50;updateUI();
+  const today=new Date().toLocaleDateString("ms-MY",{day:"numeric",month:"long",year:"numeric"});
+  document.getElementById("certName").textContent=state.name;
+  document.getElementById("certScore").textContent="Skor keseluruhan: "+state.score;
+  document.getElementById("certDate").textContent="Tarikh: "+today;
+  document.getElementById("certificateModal").classList.remove("hidden");
+  localStorage.removeItem("planMLiterasi");
+  confetti();speak("Tahniah "+state.name+". Anda kini Wira Literasi Plan M.")
+}
+function confetti(){
+  const colors=["#ffd43b","#ff6b6b","#4dabf7","#69db7c","#b197fc","#fff"];
+  for(let i=0;i<70;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDelay=Math.random()*.6+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000)
+  }
+}
+function playAgain(){localStorage.removeItem("planMLiterasi");location.reload()}
+</script>
+</body>
+</html>
